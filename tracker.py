@@ -19,3 +19,21 @@ class vehicleTracker:
 
         return tracks
     
+    def is_stationary(self, track_id, box):
+        self.previous_positions = {}
+        x1, y1, x2, y2 = box
+        cx = (x1 + x2) // 2
+        cy = (y1 + y2) // 2
+
+        if track_id not in self.previous_positions:
+            self.previous_positions[track_id] = (cx, cy)
+            return False
+
+        prev_cx, prev_cy = self.previous_positions[track_id]
+
+        dist = ((cx - prev_cx)**2 + (cy - prev_cy)**2)**0.5
+
+        self.previous_positions[track_id] = (cx, cy)
+
+        return dist < 10  
+    
