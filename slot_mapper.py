@@ -39,22 +39,34 @@ class SlotMapper:
 
         return inter_area / box_area
 
+    def shrink_polygon(self, polygon, factor=0.7):
+        poly = np.array(polygon, dtype=np.float32)
+        center = np.mean(poly, axis=0)
+        shrunk = center + factor * (poly - center)
+        return shrunk.astype(int)
 
-    def map_slots(self, tracks,tracker):
+
+    def map_slots(self, tracks):
         slot_status = []
 
         for slot in self.slots:
             polygon = slot["points"]
             occupied = False
 
+            shrunk_poly = self.shrink_polygon(polygon, factor=0.7)
+
             for track in tracks:
                 x1, y1, x2, y2, track_id = map(int, track)
-                centroid = self.get_centroid((x1, y1, x2, y2))
-                inside = self.is_inside(centroid, polygon)
-                iou = self.compute_iou((x1, y1, x2, y2), polygon)
-                stationay = tracker.is_stationary(track_id,(x1,y1,x2,y2))
 
-                if inside or iou > 0.2 and stationay:
+                centroid = self.get_centroid((x1, y1, x2, y2))
+
+                inside = cv2.pointPolygonTest(
+                    np.array(shrunk_poly, dtype=np.int32),
+                    centroid,
+                    False
+                ) >= 0
+
+                if inside:
                     occupied = True
                     break
 

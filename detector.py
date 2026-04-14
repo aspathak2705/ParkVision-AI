@@ -1,6 +1,6 @@
 from ultralytics import YOLO
 
-class veicledetector:
+class vehicledetector:
     def __init__(self,model_path="yolov8m.pt"):
         
         self.model = YOLO(model_path)
