@@ -154,14 +154,6 @@ python main.py
 
 ---
 
-## ⚠️ Limitations
-
-* Performance may drop in low-light or extreme occlusion
-* Detection accuracy depends on camera angle and resolution
-* Axis-aligned bounding boxes may not perfectly align with angled parking slots
-
----
-
 ## 🚀 Future Improvements
 
 * Multi-camera integration
